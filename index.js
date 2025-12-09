@@ -17,8 +17,8 @@ const PORT = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin:["https://finmanagent.vercel.app","http://localhost:5173"] ,   
-    credentials: true,                  
+    origin:["https://finmanagent.vercel.app","http://localhost:5173"] ,
+    credentials: true,
   })
 );
 app.use(express.json());
