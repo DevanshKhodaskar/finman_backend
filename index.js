@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 import { requireAuth } from './middleware/authMiddleware.js';
 
 dotenv.config();
-
+connectDB();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -50,7 +50,7 @@ app.use(cookieParser());
   });
 
   app.listen(PORT, async () => {
-    await connectDB();
+    
     console.log(`FinMan backend running on port http://localhost:${PORT}`);
 });
 export default app;
