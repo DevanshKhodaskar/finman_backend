@@ -30,24 +30,24 @@ app.use(cookieParser());
   app.use('/api/queries',requireAuth, queriesRoutes);
   app.use('/api/reports', reportsRoutes);
 
-  app.get('/test', async(req, res) => {
-    try {
-      const allUsers = await USER.find({});
-      return res.json({ok:true, allUsers});
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({error: "server error"});
-    }
-  });
-  app.get('/queries', async(req, res) => {
-    try {
-      const allQueries = await QUERY.find({});
-      return res.json({ok:true, allQueries});
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({error: "server error"});
-    }
-  });
+  // app.get('/test', async(req, res) => {
+  //   try {
+  //     const allUsers = await USER.find({});
+  //     return res.json({ok:true, allUsers});
+  //   } catch (error) {
+  //     console.error(error);
+  //     return res.status(500).json({error: "server error"});
+  //   }
+  // });
+  // app.get('/queries', async(req, res) => {
+  //   try {
+  //     const allQueries = await QUERY.find({});
+  //     return res.json({ok:true, allQueries});
+  //   } catch (error) {
+  //     console.error(error);
+  //     return res.status(500).json({error: "server error"});
+  //   }
+  // });
 
   app.listen(PORT, async () => {
     
