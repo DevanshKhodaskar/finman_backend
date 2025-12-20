@@ -1,21 +1,36 @@
-// backend/middleware/authMiddleware.js
 import jwt from "jsonwebtoken";
+import User from "../models/user.js";
 
-
-export const requireAuth = async (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.cookies.finman_auth_token;
-    if (!token) return res.status(401).json({ error: "Not authenticated" });
+    const token = req.cookies?.token;
+
+    if (!token) {
+      return res.status(401).json({ error: "No token provided" });
+    }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded || !decoded.phone_number) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+
+    const user = await User.findOne({ phone_number: decoded.phone_number });
+
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
     req.user = {
-      id: decoded.id,
-      phone_number: decoded.phone_number,
+      phone_number: user.phone_number,
+      id: user._id,
     };
 
     next();
   } catch (err) {
-    console.error("Auth middleware error:", err);
-    return res.status(401).json({ error: "Invalid token" });
+    console.error("AUTH MIDDLEWARE ERROR:", err); // 🔥 THIS IS KEY
+    return res.status(401).json({ error: "Authentication failed" });
   }
 };
+
+export default authMiddleware;

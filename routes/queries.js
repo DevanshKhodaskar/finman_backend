@@ -1,5 +1,7 @@
 import express from "express";
-import { requireAuth } from "../middleware/authMiddleware.js";
+const router = express.Router();
+
+import authMiddleware from "../middleware/authMiddleware.js";
 import {
   createQuery,
   listQueries,
@@ -7,9 +9,7 @@ import {
   deleteQuery
 } from "../controller/queryController.js";
 
-const router = express.Router();
-
-router.use(requireAuth);
+router.use(authMiddleware); // 🔥 applies to ALL routes below
 
 router.post("/", createQuery);
 router.get("/", listQueries);
