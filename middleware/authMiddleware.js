@@ -33,4 +33,6 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
+// Named export for compatibility with imports like: import { requireAuth } from './middleware/authMiddleware.js'
+export const requireAuth = authMiddleware;
 export default authMiddleware;
