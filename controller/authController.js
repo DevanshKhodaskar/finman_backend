@@ -18,6 +18,17 @@ function generateJWT(userId, phone_number) {
   });
 }
 
+function getCookieOptions() {
+  const isProduction = process.env.NODE_ENV === "production";
+
+  return {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "None" : "Lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  };
+}
+
 
 // Signup
 export const signup = async (req, res) => {
@@ -85,12 +96,7 @@ export const login = async (req, res) => {
 
 
     // Set cookie
-    res.cookie("finman_auth_token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("finman_auth_token", token, getCookieOptions());
 
     console.log("Login successful for:", phone_number);
 
@@ -125,11 +131,7 @@ export const getMe = async (req, res) => {
 // Logout
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("finman_auth_token", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-    });
+    res.clearCookie("finman_auth_token", getCookieOptions());
 
     return res.json({ ok: true, msg: "Logout successful" });
 

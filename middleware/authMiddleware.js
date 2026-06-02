@@ -1,9 +1,25 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
+const AUTH_COOKIE_NAMES = ["finman_auth_token", "token"];
+
+function getAuthToken(req) {
+  const cookieToken = AUTH_COOKIE_NAMES.find((cookieName) => req.cookies?.[cookieName]);
+  if (cookieToken) {
+    return req.cookies[cookieToken];
+  }
+
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith("Bearer ")) {
+    return authHeader.slice(7).trim();
+  }
+
+  return null;
+}
+
 const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.cookies?.token;
+    const token = getAuthToken(req);
 
     if (!token) {
       return res.status(401).json({ error: "No token provided" });
